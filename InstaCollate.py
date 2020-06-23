@@ -14,7 +14,7 @@ runtime = now.strftime("%m-%d-%Y_%H-%M-%S")
 output = os.path.dirname(os.path.abspath(__file__)) + f"/Download@{runtime}/"
 L = ig.Instaloader()
 
-# Modify to max post/images you want to download
+# Modify to max post/images you want to download related to the hashtag
 max = 3
 
 # Modify the script mode below
@@ -26,11 +26,11 @@ max = 3
 mode = 1
 
 # Ask for user input on hashtag to find
-search = 'hashtagthatyouwanttofind'
+search = 'tag'
 hashtag = ig.Hashtag.from_name(L.context, search)
 
 counter = 0 #tobechangedback
-for post in hashtag.get_top_posts(): #change to get_top_posts() if you want to most trending post
+for post in hashtag.get_top_posts(): # change to get_top_posts() if you want to most trending post or get_posts() for recent
     # post is an instance of instaloader.Post
     if (counter < max):
         if (mode == 0):
@@ -39,13 +39,14 @@ for post in hashtag.get_top_posts(): #change to get_top_posts() if you want to m
             if not os.path.isdir(output):
                 os.mkdir(output)
             if (post.typename == "GraphSidecar"):
-                newFolder = f'{output}{str(post.date_local).replace(":", "-").replace(" ", "_")}'
+                newFolder = f'{output}{post.profile}/'
                 # print (newFolder)
                 # print (post.tagged_users)
                 # sample output - ['person1', 'person2']
                 # print (post.url)
                 # make new directory to store the sidecar image/videos
-                os.mkdir(newFolder)
+                if not os.path.isdir(newFolder):
+                    os.mkdir(newFolder)
 
                 sidecar = post.get_sidecar_nodes()
                 # Get the sidecar nodes
@@ -53,9 +54,9 @@ for post in hashtag.get_top_posts(): #change to get_top_posts() if you want to m
                 for side in sidecar:
                     # Check if video/image - then get respective file
                     if side.is_video:
-                        wget.download(side.video_url, f'{newFolder}/{str(post.date_local).replace(":", "-").strip(" ")}_{slide}.mp4')
+                        wget.download(side.video_url, f'{newFolder}{str(post.date_local).replace(":", "-").strip(" ")}_{slide}.mp4')
                     else:
-                        wget.download(side.display_url, f'{newFolder}/{str(post.date_local).replace(":", "-").strip(" ")}_{slide}.jpg')
+                        wget.download(side.display_url, f'{newFolder}{str(post.date_local).replace(":", "-").strip(" ")}_{slide}.jpg')
                     slide += 1
             elif (post.typename == "GraphVideo"):
                 tagged = post.tagged_users
