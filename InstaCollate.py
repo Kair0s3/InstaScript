@@ -74,6 +74,4 @@ for post in hashtag.get_top_posts(): # change to get_top_posts() if you want to 
         counter += 1
     else:
         break
-    #print (download)
-    #quit() #For Testing
  # I can probably implement json to store some information eg. captions
