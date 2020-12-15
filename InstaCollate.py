@@ -43,19 +43,20 @@ for post in hashtag.get_top_posts(): # change to get_top_posts() if you want to 
                 # print (newFolder)
                 # print (post.tagged_users)
                 # sample output - ['person1', 'person2']
-                # print (post.url)
+                print (post.url)
                 # make new directory to store the sidecar image/videos
                 if not os.path.isdir(newFolder):
                     os.mkdir(newFolder)
-
                 sidecar = post.get_sidecar_nodes()
                 # Get the sidecar nodes
                 slide = 1
                 for side in sidecar:
                     # Check if video/image - then get respective file
                     if side.is_video:
+                        #print (side.video_url)
                         wget.download(side.video_url, f'{newFolder}{str(post.date_local).replace(":", "-").strip(" ")}_{slide}.mp4')
                     else:
+                        #print (side.display_url)
                         wget.download(side.display_url, f'{newFolder}{str(post.date_local).replace(":", "-").strip(" ")}_{slide}.jpg')
                     slide += 1
             elif (post.typename == "GraphVideo"):
@@ -69,7 +70,9 @@ for post in hashtag.get_top_posts(): # change to get_top_posts() if you want to 
                 # if (tagged):
                 #     print (tagged)
                 imageUrl = post.url
+                print (post.url)
                 wget.download(imageUrl, f'{output}{str(post.date_local).replace(":", "-").strip(" ")}.jpg')
+        #elif (mode == 3):
         print (post.profile + " - " + post.typename)
         counter += 1
     else:
